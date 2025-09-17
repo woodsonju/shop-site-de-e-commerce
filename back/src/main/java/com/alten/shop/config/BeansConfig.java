@@ -21,7 +21,25 @@ public class BeansConfig {
         return new ApplicationAuditAware();
     }
 
+    /*
+        OPTIONS :
+        Permet aux clients HTTP d’interroger le serveur pour fournir les options de communications à utiliser
+        pour une ressource ciblée ou un ensemble de ressources (Méthodes autorisées, Entête autorisées,
+        Origines autorisés, etc..). Utilisé souvent comme requête de pré-vérification Cross-Origin CORS
+        (Cross Origin Resource Sharing)
 
+        CORS:
+        Cross Origin Ressource Sharing. Avec Angular par exemple avant d’envoyer la méthode post, le navigateur
+        envoie d’abord la méthode options pour demander au domaine, s’il a droit de lui envoyer la requête.
+        Un navigateur refusera toujours d’envoyer une requête d’un domaine vers un autre ; à moins que
+        si le domaine cible autorise cette opération.
+
+        Entêtes autorisés :
+        Avant que le navigateur envoie une requête http, il doit d’abord savoir si la requête qui va être
+        envoyé par l’application ne contient pas des entêtes qui sont refusés, qui ne sont pas acceptés
+        par le serveur.
+
+     */
     @Bean
     public CorsFilter corsFilter() {
         //Création d'une configuration CORS

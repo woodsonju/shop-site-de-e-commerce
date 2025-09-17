@@ -1,10 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+<form #form="ngForm" (ngSubmit)="onSave()">
+  <!-- Nom -->
+  <div class="form-field">
+    <label for="name">Nom</label>
+    <input
+      pInputText
+      type="text"
+      id="name"
+      name="name"
+      [(ngModel)]="editedProduct().name"
+      required
+    />
+  </div>
 
-</body>
-</html>
+  <!-- Prix -->
+  <div class="form-field">
+    <label for="price">Prix</label>
+    <p-inputNumber
+      [(ngModel)]="editedProduct().price"
+      name="price"
+      mode="decimal"
+      required
+    />
+  </div>
+
+  <!-- Description -->
+  <div class="form-field">
+    <label for="description">Description</label>
+    <textarea
+      pInputTextarea
+      id="description"
+      name="description"
+      rows="5"
+      cols="30"
+      [(ngModel)]="editedProduct().description"
+    ></textarea>
+  </div>
+
+  <!-- Catégorie -->
+  <div class="form-field">
+    <label for="category">Catégorie</label>
+    <p-dropdown
+      [options]="categories"
+      [(ngModel)]="editedProduct().category"
+      name="category"
+      appendTo="body"
+    />
+  </div>
+
+  <!-- Boutons -->
+  <div class="flex justify-content-between">
+    <p-button
+      type="button"
+      (click)="onCancel()"
+      label="Annuler"
+      severity="help"
+    />
+    <p-button
+      type="submit"
+      [disabled]="!form.valid"
+      label="Enregistrer"
+      severity="success"
+    />
+  </div>
+</form>

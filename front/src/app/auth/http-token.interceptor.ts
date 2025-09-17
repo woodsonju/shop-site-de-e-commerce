@@ -45,13 +45,19 @@ export class HttpTokenInterceptor implements HttpInterceptor {
 
     // Ajout conditionnel du token
     if (isApiCall && !isPublic) {
+      //Cet intercepteur ajoute un jeton d'authentification (Bearer token) à chaque requête HTTP
+      //next est un HttpHandler qui est utilisé pour transmettre la requête au prochain intercepteur dans la chaîne
+      //ou pour envoyer la requête au backend si aucun autre intercepteur n'est présent
       const token = this.tokenService.token;
       if (token && this.tokenService.isTokenValid()) {
+        //Clone la requête  et ajoute un en-tête Authorization contenant le token sous forme de Bearer token.
         req = request.clone({
           headers: new HttpHeaders({
             Authorization: `Bearer ${token}`,
           }),
         });
+        //Si aucun token n'est disponible, la requête  est envoyée sans modification.
+        //return next.handle(request);
       }
     }
 
@@ -61,7 +67,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
         if (err instanceof HttpErrorResponse && err.status === 401) {
           this.tokenService.clear();
           // Optionnel : redirection vers /login si tu as un écran d'auth
-          // this.router.navigate(['/login']);
+          //this.router.navigate(['/login']);
         }
         return throwError(() => err);
       })

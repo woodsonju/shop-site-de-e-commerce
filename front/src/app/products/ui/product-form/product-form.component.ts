@@ -5,6 +5,69 @@ import {
   input,
   Output,
   ViewEncapsulation,
+} from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Product } from 'app/products/data-access/product.model';
+import { SelectItem } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+
+@Component({
+  selector: 'app-product-form',
+  templateUrl: './product-form.component.html', // ✅ externalisé
+  styleUrls: ['./product-form.component.scss'],
+  standalone: true,
+  imports: [
+    FormsModule,
+    ButtonModule,
+    InputTextModule,
+    InputNumberModule,
+    InputTextareaModule,
+    DropdownModule,
+  ],
+  encapsulation: ViewEncapsulation.None,
+})
+export class ProductFormComponent {
+  /** Produit en entrée (signal obligatoire) */
+  public readonly product = input.required<Product>();
+
+  /** Événements émis au parent */
+  @Output() cancel = new EventEmitter<void>();
+  @Output() save = new EventEmitter<Product>();
+
+  /** Copie calculée du produit pour édition (évite de modifier directement l'entrée) */
+  public readonly editedProduct = computed(() => ({ ...this.product() }));
+
+  /** Liste des catégories (dropdown) */
+  public readonly categories: SelectItem[] = [
+    { value: 'Accessories', label: 'Accessories' },
+    { value: 'Fitness', label: 'Fitness' },
+    { value: 'Clothing', label: 'Clothing' },
+    { value: 'Electronics', label: 'Electronics' },
+  ];
+
+  onCancel() {
+    this.cancel.emit();
+  }
+
+  onSave() {
+    this.save.emit(this.editedProduct());
+  }
+}
+
+
+
+/*
+import {
+  Component,
+  computed,
+  EventEmitter,
+  input,
+  Output,
+  ViewEncapsulation,
 } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { Product } from "app/products/data-access/product.model";
@@ -30,27 +93,27 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
       </div>
       <div class="form-field">
         <label for="price">Prix</label>
-        <p-inputNumber 
-          [(ngModel)]="editedProduct().price" 
+        <p-inputNumber
+          [(ngModel)]="editedProduct().price"
           name="price"
           mode="decimal"
-          required/> 
+          required/>
       </div>
       <div class="form-field">
         <label for="description">Description</label>
-        <textarea pInputTextarea 
+        <textarea pInputTextarea
           id="description"
           name="description"
-          rows="5" 
-          cols="30" 
+          rows="5"
+          cols="30"
           [(ngModel)]="editedProduct().description">
         </textarea>
-      </div>      
+      </div>
       <div class="form-field">
         <label for="description">Catégorie</label>
-        <p-dropdown 
-          [options]="categories" 
-          [(ngModel)]="editedProduct().category" 
+        <p-dropdown
+          [options]="categories"
+          [(ngModel)]="editedProduct().category"
           name="category"
           appendTo="body"
         />
@@ -96,3 +159,4 @@ export class ProductFormComponent {
     this.save.emit(this.editedProduct());
   }
 }
+*/

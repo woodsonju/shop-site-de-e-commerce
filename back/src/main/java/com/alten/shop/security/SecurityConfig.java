@@ -19,6 +19,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+/*
+ * On va Configurer la sécurité de notre  application en utilisant Spring Security
+ *
+ * @Configuration: L'annotation @Configuration indique que la classe est une classe de configuration.
+ * @EnableWebSecurity: L'annotation @EnableWebSecurity est utilisée pour activer la sécurité Web
+ * dans une application Spring. Elle doit être appliquée à une classe de configuration
+ * et indique à Spring de générer automatiquement une configuration de sécurité Web.
+ *
+ * @EnableMethodSecurity: L'annotation @EnableMethodSecurity est utilisée pour activer
+ * la sécurité au niveau de la méthode dans une application Spring.
+ * Elle permet d'utiliser des annotations de sécurité telles que @PreAuthorize, @PostAuthorize, @Secured,
+ *  etc., pour sécuriser les méthodes de votre application.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
@@ -61,7 +74,7 @@ public class SecurityConfig {
     };
 
 
-    private final AuthenticationConfiguration authenticationConfiguration;
+  //  private final AuthenticationConfiguration authenticationConfiguration;
 
     /**
      * Définit l’encodeur de mot de passe utilisé dans l’application (BCrypt).
@@ -73,20 +86,72 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    /**
+     * Service permettant d'aller chercher en bdd l'utilisateur par username
+     * UserDetailsService est une interface de Spring Security qui est utilisée pour charger les détails
+     * de l'utilisateur à partir de la source de données (par exemple, base de données).
+     * On va utiliser cette interface pour implementer la façon dont Spring Security
+     * va récuperer et traiter les détails d'authentification de l'utilisateur.
+     */
     private final UserDetailsService userDetailsService;
 
+    /**
+     *
+     * L'AuthenticationManager est l'interface principale de Spring Security pour l'authentification des utilisateurs
+     * La méthode utilise la méthode getAuthenticationManager() de l'objet AuthenticationConfiguration
+     * pour obtenir l'instance d'AuthenticationManager.
+     *
+     * En retournant cette instance d'AuthenticationManager, la méthode permet d'injecter
+     * l'AuthenticationManager dans d'autres composants de l'application qui en ont besoin,
+     * tels que les services d'authentification.
+     *
+     * Cette configuration est importante car l'AuthenticationManager est utilisé par Spring Security
+     * pour effectuer l'authentification des utilisateurs lorsqu'ils tentent de se connecter à l'application.
+     *
+     * Il peut prendre en charge différents mécanismes d'authentification, tels que l'authentification
+     * par nom d'utilisateur et mot de passe, l'authentification par jeton JWT, etc
+     *
+     *
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    /**
+     * La méthode securityFilterChain est annotée avec @Bean, ce qui indique qu'elle est utilisée
+     * pour définir et configurer le filtre de sécurité de Spring Security.
+     * Elle prend en paramètre un objet HttpSecurity qui permet de configurer les règles de sécurité.
+     *
+     * @Bean :
+     * Lorsque Spring démarre, il analyse toutes les classes de configuration annotées
+     * avec @Configuration (ou équivalentes).
+     * Il appelle toutes les méthodes annotées avec @Bean dans ces classes.
+     * Le retour de ces méthodes est enregistré dans le contexte de l'application Spring en tant que bean.
+     * Ces beans peuvent ensuite être injectés dans d'autres parties de l'application via des annotations
+     * comme @Autowired.
+     *
+     * Dans le cas de SecurityFilterChain, ce bean est utilisé par Spring Security pour sécuriser
+     * les requêtes HTTP selon les règles que vous avez définies.
+     *
+     * csrf(AbstractHttpConfigurer::disable) désactive la protection CSRF (Cross-Site Request Forgery)
+     * pour autoriser les requêtes sans utiliser de jeton CSRF
+     *
+     * @param http  L'objet HttpSecurity utilisé pour configurer les règles de sécurité.
+     * @return
+     * @throws Exception
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.cors(withDefaults())   //active CORS avec le bean
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(authorizedUrls)
+                        .requestMatchers(authorizedUrls)  // Autorise les URLs spécifiées dans authorizedUrls
                         .permitAll()   // Autorise l'accès sans restriction
+                        /*
+                         * anyRequest().authenticated() configure toutes les autres requêtes pour exiger une authentification.
+                         * Cela signifie que l'accès à ces requêtes nécessite une authentification préalable.
+                         */
                         .anyRequest()
                         .authenticated() // Exige l'authentification pour toutes les autres requêtes
                 )

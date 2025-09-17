@@ -160,3 +160,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.debug("Unauthorized access to {}: {}", request.getRequestURI(), message);
     }
 }
+
+
+/*
+ * Rôle de JwtAuthenticationFilter :
+ * Ce filtre :
+ * 	 - Intercepte chaque requête HTTP entrante 🔍
+ *   - Extrait le token JWT de l’en-tête Authorization
+ *   - Vérifie sa validité avec JwtService
+ *   - Si le token est valide, il :
+ *   	- Extrait le username
+ *   	- Charge l’utilisateur via UserDetailsServiceImpl
+ *   		Extrait le username du token
+			Appelle UserDetailsService pour obtenir les détails complets
+ *   	- Injecte l’utilisateur dans le SecurityContext
+ *   		Crée un objet Authentication valide
+			Le stocke dans SecurityContextHolder
+ *
+ *   Ce filtre agit avant UsernamePasswordAuthenticationFilter, donc avant toute vérification par formulaire.
+ *
+ */
