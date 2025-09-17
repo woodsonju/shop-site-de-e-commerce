@@ -1,0 +1,71 @@
+/* Conteneur global centré */
+.container {
+  display: grid;
+  place-items: center;
+  padding: 2rem 1rem;
+}
+
+/* Carte centrale */
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--surface-card, #fff);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  display: grid;
+  gap: 1rem;
+
+  h2 {
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+  }
+
+  .label {
+    font-size: 0.9rem;
+    color: var(--text-color-secondary, #6b7280);
+  }
+
+  .code-input {
+    letter-spacing: 0.35rem;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    font-size: 1.25rem;
+  }
+
+  .hint {
+    font-size: 0.85rem;
+    color: var(--text-color-secondary, #6b7280);
+
+    &.error {
+      color: #dc3545;
+    }
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+  }
+
+  .loader {
+    display: grid;
+    place-items: center;
+    margin-top: 0.5rem;
+  }
+}
+
+/* Carte de succès */
+.success-card {
+  text-align: center;
+
+  p-button {
+    margin-top: 0.75rem;
+  }
+}
+
+/* Utilitaire */
+.ml-2 {
+  margin-left: 0.5rem;
+}

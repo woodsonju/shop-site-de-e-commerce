@@ -1,0 +1,26 @@
+/* Mise en forme simple du formulaire d'inscription */
+.form {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 14px;
+
+  input, p-password {
+    width: 100%;
+  }
+
+  label {
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .error {
+    color: #c0392b;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+}

@@ -1,0 +1,57 @@
+<h1 class="text-center">Liste des produits</h1>
+
+<p-button label="Créer produit" (onClick)="onCreate()" class="block text-center"/>
+
+<!-- Message d’erreur global -->
+@if (error()) {
+  <p-message severity="danger" [text]="error()!" class="error-message"></p-message>
+}
+
+
+<!-- Loader (affiché pendant les requêtes en cours) -->
+@if (loading()) {
+  <div class="loader-container">
+    <p-progressSpinner strokeWidth="4"></p-progressSpinner>
+  </div>
+}
+
+
+<p-dataView #dv [value]="products()">
+    <ng-template pTemplate="list" let-products>
+        @for (product of products; track product) {
+            <p-card class="block mb-2">
+                <span class="font-medium text-secondary text-sm">{{ product.category }}</span>
+                <div class="text-lg font-medium text-900 mt-2">{{ product.name }}</div>
+
+                <ng-template pTemplate="footer">
+                    <div class="flex gap-3 mt-1">
+                        <p-button label="Modifier" severity="secondary" (onClick)="onUpdate(product)"/>
+                        <p-button label="Supprimer" severity="danger" (onClick)="onDelete(product)" />
+                    </div>
+                </ng-template>
+            </p-card>
+        }
+    </ng-template>
+</p-dataView>
+
+<!-- Paginator (lié aux métadonnées de page renvoyées par le back) -->
+<p-paginator
+  [rows]="rows()"
+  [totalRecords]="totalRecords()"
+  [first]="first()"
+  [rowsPerPageOptions]="[6, 12, 24, 48]"
+  [showFirstLastIcon]="true"
+  [showPageLinks]="true"
+  (onPageChange)="onPageChange($event)"
+  styleClass="mt-3"
+/>
+
+<p-dialog [(visible)]="isDialogVisible"
+    [style]="{ width: '50vw' }"
+    header="Ajout/Edition produit">
+    <app-product-form
+        [product]="editedProduct()"
+        (save)="onSave($event)"
+        (cancel)="onCancel()"
+    />
+</p-dialog>

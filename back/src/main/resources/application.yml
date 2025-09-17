@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: back-api
+
+  profiles:
+    active: dev
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+
+
+springdoc:
+  default-produces-media-type: application/json
+  swagger-ui:
+    path: /swagger-ui.html # expose /swagger-ui.html
+    url: /v3/api-docs  # où se trouve le JSON de la spec
+
+server:
+  servlet:
+    context-path: /api/v1/
+
+logging:
+  level:
+    root: info
+    org.springframework.web: DEBUG
+    org.springframework.mail: DEBUG

@@ -1,0 +1,74 @@
+<div class="container">
+
+  <!-- Message global d’erreur -->
+  @if (error()) {
+    <p-message severity="danger" [text]="error()!"></p-message>
+  }
+
+  <!-- Message global de succès -->
+  @if (success()) {
+    <p-message severity="success" [text]="success()!"></p-message>
+  }
+
+  <!-- Formulaire d’activation (affiché si pas encore soumis avec succès) -->
+  @if (!submitted() || (submitted() && !success())) {
+    <div class="card">
+      <h2>Activate your account</h2>
+
+      <label for="code" class="label">Activation code</label>
+      <input
+        id="code"
+        type="text"
+        pInputText
+        class="code-input"
+        [maxlength]="6"
+        [placeholder]="'6 digits'"
+        [ngModel]="code()"
+        (ngModelChange)="onCodeInput($event)"
+      />
+
+      <!-- Erreur locale : uniquement des chiffres -->
+      @if (code() && !isNumeric(code())) {
+        <small class="hint error">Only digits are allowed.</small>
+      }
+
+      <!-- Erreur locale : longueur exacte 6 -->
+      @if (code() && code().length > 0 && code().length !== 6) {
+        <small class="hint error">Code must be exactly 6 digits.</small>
+      }
+
+      <!-- Actions -->
+      <div class="actions">
+        <p-button
+          label="Confirm"
+          (onClick)="submit()"
+          [disabled]="!codeValid() || loading()"
+          [loading]="loading()">
+        </p-button>
+
+        <p-button
+          label="Go to Login"
+          severity="secondary"
+          class="ml-2"
+          (onClick)="redirectToLogin()">
+        </p-button>
+      </div>
+
+      <!-- Loader centré pendant l’appel -->
+      @if (loading()) {
+        <div class="loader">
+          <p-progressSpinner strokeWidth="4"></p-progressSpinner>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Écran post-soumission en succès -->
+  @if (submitted() && success()) {
+    <div class="card success-card">
+      <h2>Activation Successful!</h2>
+      <p>Your account has been successfully activated.</p>
+      <p-button label="Go to Login" (onClick)="redirectToLogin()" severity="success"></p-button>
+    </div>
+  }
+</div>

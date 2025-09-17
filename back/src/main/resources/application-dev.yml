@@ -1,0 +1,64 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/alten_shop?createDatabaseIfNotExist=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        use_sql_comments: true
+        format_sql: true
+
+
+  mail: # JavaMail config
+    host: smtp.gmail.com    # Adresse du serveur SMTP (spécifie l'adresse du serveur SMTP auquel se connecter.)
+    port: 587              # Port pour la connexion SMTP sécurisée via STARTTLS (recommandé)
+    username: dawantest311@gmail.com # Nom d'utilisateur pour l'authentification SMTP
+    password: yxtdmsbugdzavqmj        # Mot de passe d'application pour l'authentification SMTP (jamais le mot de passe Gmail direct)
+    properties:
+      mail:
+        smtp:
+          auth: true             # Activation de l'authentification SMTP
+          starttls:
+            enable: true          #Activation de la sécurité STARTTLS pour le transport
+          timeout: 5000           # Délai d'attente SMTP global (en millisecondes)
+          connectiontimeout: 5000 # Délai maximum pour établir la connexion SMTP (en millisecondes)
+          writetimeout: 5000      # Délai d'écriture SMTP / Délai maximum pour envoyer les données SMTP (en millisecondes)
+    default-encoding: UTF-8        # Encodage par défaut des emails (gère bien les accents et caractères spéciaux)
+
+  sql:
+    init:
+      mode: always
+      platform: mysql
+      data-locations: # là où se trouvent vos scripts DML
+        - classpath:db/data.sql
+
+frontapp:
+  url: https://localhost:4200/activate-account  # Exemple d'URL de ton application Front-End si besoin d'envoyer des liens dans les emails
+
+application:
+  security:
+    jwt:
+      secret-key: d4555742dfa008a18bc3bf18cfa3bc53bf7f96aec73bdd06efeef410f615de4b
+      expiration: 86400000 # a day
+      refresh-token:
+        expiration: 604800000 # 7 days
+  mailing:
+    frontend:
+      activation-url: http://localhost:4200/activate-account
+  file:
+    uploads:
+      photos-output-path: ./uploads  #définit le chemin où les fichiers seront stockés. La propriété photos-output-path spécifie le répertoire racine des téléchargements.
+server:
+  port: 8086
+
+logging:
+  level:
+    org:
+      hibernate: INFO

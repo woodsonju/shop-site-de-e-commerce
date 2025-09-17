@@ -1,0 +1,29 @@
+:host {
+    display: block;
+    height: 100%;
+    overflow: auto;
+}
+
+/* 🔄 Conteneur du loader */
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+/* Style de message d'erreur */
+.error-message {
+  display: block;
+  margin: 0.5rem auto;
+  max-width: 600px;
+  text-align: center;
+}
+
+
+/* Optionnel : personnalisation du spinner */
+::ng-deep p-progressSpinner {
+  width: 50px !important;
+  height: 50px !important;
+  stroke: var(--primary-color, #3f51b5);
+}
